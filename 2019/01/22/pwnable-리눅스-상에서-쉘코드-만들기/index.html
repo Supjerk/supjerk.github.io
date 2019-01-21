@@ -6,13 +6,17 @@
   <meta http-equiv="cache-control" content="no-cache">
   <meta http-equiv="expires" content="0">
   
-  <title>More deeper..</title>
+  <title>[pwnable.kr] fsb writeup | More deeper..</title>
   <meta name="author" content="Supjerk">
+  
+  <meta name="description" content="오늘은 쉘코드를 한번 만들어 보겠다. https://blog.naver.com/mathboy7/220215329450
+ 이 링크에 나온 쉘코드 하나를 분석해 보면서 말이다.
+https://defuse.ca/online-x86-assembler.htm 에서 첫번째 쉘코드">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  
+  <meta property="og:title" content="[pwnable.kr] fsb writeup">
   <meta property="og:site_name" content="More deeper..">
 
   
@@ -111,154 +115,29 @@ var _hmt = _hmt || [];
 
   <div class="container">
   	<div class="content">
-    	 <div class="page-header logo">
-  <h1>More deeper..<span class="blink-fast">∎</span></h1>
-</div>
+    	 
 
-<div class="row page">
 
 	
+		<div class="page-header">
+			<h1> [pwnable.kr] fsb writeup</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
 	<div class="col-md-9">
 	
 
-		<div class="slogan">
+	<!-- content -->
+	<div class="mypage">		
+	  		
 
-
-		<i class="fa fa-heart blink-slow"></i>
-
-		Keep and carry on.
-
-</div>    
-
-		<div id="top_search"></div>
-		<div class="mypage">
-		
-		<!-- title and entry -->
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2019/01/22/pwnable-kr-dragon-write-up/">[pwnable.kr] dragon write up</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2019-01-22  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>FightDragon 함수가 시작할 때 malloc을 보고 힙 관련 취약점이 터질 것이라 유추했다.</p>
-<p>역시 KnightAttack, PreistAttack 함수에서 드래곤의 피가 0 이하일 때 dragon 배열을 free 시키고 1을 반환해 FightDragon 으로 다시 돌아가는데 if (v3) 분기에서 ((void (__cdecl <em>)(_DWORD </em>))*dragon)(dragon); 을 실행하는 구문이 있는데 이미 free 된 뒤라 UAF가 터진다.</p>
-<p>다만 저 드래곤의 피를 어떻게 0 이하로 만드느냐가 관건인데,</p>
-<p>  dragon+8 은 드래곤의 피다.</p>
-<p>   요 부분에서 _BYTE *, 즉 1바이트로 돼있다. 127을 넘기는 째에 오버플로우 돼서 UAF 익스플로잇을 할 수 있다.</p>
-<p>   Baby Dragon 에서는 딱 봐도 불가능, Mama Dragon 으로 계산해 보면 (프리스트가 Invisible 이란 선택지가 있어서 살았다.)</p>
-<p>  -Preist-</p>
-<p>  [1] 85 Invisible</p>
-<p>  [2] 95 Invisible</p>
-<p>  [3] 100 Mana Charge, Player Health: 32</p>
-<p>  [4] 105 Invisible</p>
-<p>  [5] 110 Invisible</p>
-<p>  [6] 115 Mana Charge, Player Health: 22</p>
-<p>  [7] 120 Invisible</p>
-<p>  [8] 125 Invisible</p>
-<p>  [9] 130 Mana Charge, Player Health: 12</p>
-<p>  로 프리스트, Mama Dragon 이란 경우 하에 UAF 가 가능하겠다. ( SecretLevel 함수 안에 push “/bin/sh”, call system 이 있어서 그쪽으로 점프해 주면 된다. call 과 jmp 는 push eip 를 하냐 안하냐 밖엔 차이가 없다. )</p>
-<p>  pwntools 를 이용해 익스하면 되긴 하지만 살짝 꼼수를 부렸다.</p>
-<p>  처음엔 Baby Dragon 밖에는 나오지 않길래 a.txt에</p>
-<p>  1</p>
-<p>  1</p>
-<p>  1</p>
-<p>  1</p>
-<p>  3</p>
-<p>  3</p>
-<p>  2</p>
-<p>  3</p>
-<p>  3</p>
-<p>  2</p>
-<p>  3</p>
-<p>  3</p>
-<p>  2</p>
-<p>  3</p>
-<p>  3</p>
-<p>  2</p>
-<p>  p32(address)</p>
-<p>  이렇게 넣은 뒤 (cat a.txt; cat) | nc pwnable.kr 9004</p>
-<p>  돌리고 cat flag 때렸다.</p>
-<p>  포너블 공부를 하던 나날 중에서 이례적으로 재밌는 날이었다.</p>
-<p>  P.S  IDA Hex-Rays 가 의외로 오류가 많은 것 같기도 하다.</p>
-
-	
-	</div>
-  <a type="button" href="/2019/01/22/pwnable-kr-dragon-write-up/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2019/01/22/pwnable-kr-fsb-writeup/">[pwnable.kr] fsb writeup</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2019-01-22  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p><a href="https://gist.github.com/ihciah/2b164e86fa9dd2f267d7" target="_blank" rel="noopener">https://gist.github.com/ihciah/2b164e86fa9dd2f267d7</a></p>
-<p><a href="http://jasonjason.tistory.com/5" target="_blank" rel="noopener">http://jasonjason.tistory.com/5</a></p>
-<p><a href="http://code1018.tistory.com/185" target="_blank" rel="noopener">http://code1018.tistory.com/185</a></p>
-<p>대낮부터 고민하다 $EBP를 덮어씌우면 될듯 한 것 같아 시도해 봤지만 무슨 이유인지 $EBP가 다른 값으로 변하고 후에 다시 변조해 줘도 다른 값을 $EIP로 인식을 해서 제대로 쉘을 못 땄다. </p>
-<p>더 분석해 보면 될 터인데 특유의 어셈블리어 울렁증이 발생해 재빨리 구글에 write up 을 치고 위 세 개를 순서대로 봤다.</p>
-<p>첫 번째 write up 에서는 offset 도 따고 %hn 도 하고 뭐시기 뭐시기 아주 생지랄을 하는데 뭐라 씨부리는 지 몰라서 패스했고</p>
-<p>두 번째 write up 에서는 잘 가다가 영화 보고 익스플로잇 돌리니 Seg Fault 나고 시간은 자정을 넘긴 지라 세번째 write up 으로 패스했다.</p>
-<p>세 번째 write up 에서는 드디어 한글로 제대로 설명된 포스트가 있었다. printf_GOT 를 execve를 call 하는 주소로 overwrite 하는 간단명료한 글이었다.</p>
-<p>그 덕택으로 아래와 같이 flag를 땄다. 나중에 다시 풀어봐야 할 문제 목록 중 하나다 ㅋㅋ.(이때까지 푼 문제 전체가 그렇다.)</p>
-
-	
-	</div>
-  <a type="button" href="/2019/01/22/pwnable-kr-fsb-writeup/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2019/01/22/pwnable-리눅스-상에서-쉘코드-만들기/">[pwnable.kr] fsb writeup</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2019-01-22  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>오늘은 쉘코드를 한번 만들어 보겠다. <a href="https://blog.naver.com/mathboy7/220215329450" target="_blank" rel="noopener">https://blog.naver.com/mathboy7/220215329450</a></p>
+	  <p>오늘은 쉘코드를 한번 만들어 보겠다. <a href="https://blog.naver.com/mathboy7/220215329450" target="_blank" rel="noopener">https://blog.naver.com/mathboy7/220215329450</a></p>
 <p> 이 링크에 나온 쉘코드 하나를 분석해 보면서 말이다.</p>
 <p><a href="https://defuse.ca/online-x86-assembler.htm" target="_blank" rel="noopener">https://defuse.ca/online-x86-assembler.htm</a> 에서 첫번째 쉘코드(Opcode)를 Disassemble 하면 </p>
 <p>0:  31 c0                   xor    eax,eax<br>2:    50                                       push   eax<br>3:  68 2f 2f 73 68          push   0x68732f2f<br>8:  68 2f 62 69 6e          push   0x6e69622f<br>d:  89 e3                   mov    ebx,esp<br>f:  50                      push   eax<br>10: 53                      push   ebx<br>11: 89 e1                   mov    ecx,esp<br>13: 89 c2                   mov    edx,eax<br>15: b0 0b                   mov    al,0xb<br>17: cd 80                   int    0x80</p>
@@ -289,143 +168,82 @@ var _hmt = _hmt || [];
 <p>이렇게 main.c 코드를 짜고</p>
 <p>gcc main.c -m32 -fno-stack-protector -z execstack &amp;&amp; ./a.out</p>
 <p>명령을 내리면 제대로 동작한다는 점을 알수 있다.</p>
-
-	
-	</div>
-  <a type="button" href="/2019/01/22/pwnable-리눅스-상에서-쉘코드-만들기/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2019/01/21/hello-world/">Hello World</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2019-01-21  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-	
-	</div>
-  <a type="button" href="/2019/01/21/hello-world/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-
-		</div>
-
-		<!-- pagination -->
-		<div>
-  		<center>
-		<div class="pagination">
-
-   
-</div>
-
-  		</center>
-		</div>
-
-		
-		
-	</div> <!-- col-md-9 -->
-
-	
-		<div class="col-md-3">
-	<div id="sidebar">
-	
-			
-  <div id="site_search">
-   <div class="form-group">
-    <input type="text" id="local-search-input" name="q" results="0" placeholder="Search" class="st-search-input st-default-search-input form-control">
-   </div>  
-  <div id="local-search-result"></div>
-  </div>
-
-
-		
-			
-		
-			
-	<div class="widget">
-		<h4>Tag Cloud</h4>
-		<ul class="tag_box inline list-unstyled">		
-		
-			<li><a href="/tags/pwnable-fsb/">pwnable, fsb<span>1</span></a></li>
-		
-			<li><a href="/tags/pwnable-shellcode/">pwnable, shellcode<span>1</span></a></li>
-		
-			<li><a href="/tags/pwnable-uaf/">pwnable,uaf<span>1</span></a></li>
-		
-		 
-		</ul>
+	  
 	</div>
 
+	<div>
+  	<center>
+	<div class="pagination">
 
-		
-			
-<div class="widget">
-  <h4>Recent Posts</h4>
-  <ul class="entry list-unstyled">
     
-      <li>
-        <a href="/2019/01/22/pwnable-kr-dragon-write-up/"><i class="fa fa-file-o"></i>[pwnable.kr] dragon write up</a>
-      </li>
     
-      <li>
-        <a href="/2019/01/22/pwnable-kr-fsb-writeup/"><i class="fa fa-file-o"></i>[pwnable.kr] fsb writeup</a>
-      </li>
+    <a href="/2019/01/22/pwnable-kr-fsb-writeup/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
     
-      <li>
-        <a href="/2019/01/22/pwnable-리눅스-상에서-쉘코드-만들기/"><i class="fa fa-file-o"></i>[pwnable.kr] fsb writeup</a>
-      </li>
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-      <li>
-        <a href="/2019/01/21/hello-world/"><i class="fa fa-file-o"></i>Hello World</a>
-      </li>
+    <a href="/2019/01/21/hello-world/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
     
-  </ul>
+
+    
 </div>
 
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
 		
-			
-<div class="widget">
-	<h4>Links</h4>
-	<ul class="blogroll list-unstyled">
 	
-		<li><i class="fa fa-github"></i><a href="https://github.com/blackshow/hexo-theme-freemind.386" title="Freemind.386's Github repository." target="_blank" ]);"="">Freemind.386</a></li>
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
 	
-	</ul>
-</div>
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2019-01-22 
+	</div>
+	
 
+	<!-- categories -->
+    
 
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/pwnable-shellcode/">pwnable, shellcode<span>1</span></a></li>
+    </ul>
+	</div>
 		
-	</div> <!-- sidebar -->
-</div> <!-- col-md-3 -->
 
+	<!-- toc -->
+	<div class="meta-widget">
 	
+	</div>
 	
-</div> <!-- row-fluid -->
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
 	</div>
   </div>
   <div class="container-narrow">

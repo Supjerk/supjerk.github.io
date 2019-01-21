@@ -6,13 +6,16 @@
   <meta http-equiv="cache-control" content="no-cache">
   <meta http-equiv="expires" content="0">
   
-  <title>Archives: 2019 | More deeper..</title>
+  <title>[pwnable.kr] dragon write up | More deeper..</title>
   <meta name="author" content="Supjerk">
+  
+  <meta name="description" content="FightDragon 함수가 시작할 때 malloc을 보고 힙 관련 취약점이 터질 것이라 유추했다.
+역시 KnightAttack, PreistAttack 함수에서 드래곤의 피가 0 이하일 때 dragon 배열을 free 시키고 1을 반환해 FightDragon 으로 다">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  
+  <meta property="og:title" content="[pwnable.kr] dragon write up">
   <meta property="og:site_name" content="More deeper..">
 
   
@@ -113,144 +116,142 @@ var _hmt = _hmt || [];
   	<div class="content">
     	 
 
-<!-- title -->
-<div class="page-header">
-  <h1 class="archive-title"><i class="fa fa-archive"></i> 2019</h1>
-</div>
 
-<div class="row page">
-  <!-- cols -->
-  
-  <div class="col-md-9">
 	
-
-	  <div id="top_search"></div>
-
-	  <div class="archive">
-		
-		
-		
-			
-			
-			<h4 class="archive-ul" data-toggle="collapse" data-target="#2019">2019<b class="caret"></b></h4>
-			<ul id="2019" class="collapse in">
-			
-		
-		<li class="listing-item">
-		<span class="date_class"> 2019-01-22 </span> &raquo;
-		
-		   <span class="title"><a href="/2019/01/22/pwnable-kr-dragon-write-up/">[pwnable.kr] dragon write up</a></span>
-		
-		</li>			
-		
-		
-		
-		<li class="listing-item">
-		<span class="date_class"> 2019-01-22 </span> &raquo;
-		
-		   <span class="title"><a href="/2019/01/22/pwnable-kr-fsb-writeup/">[pwnable.kr] fsb writeup</a></span>
-		
-		</li>			
-		
-		
-		
-		<li class="listing-item">
-		<span class="date_class"> 2019-01-22 </span> &raquo;
-		
-		   <span class="title"><a href="/2019/01/22/pwnable-리눅스-상에서-쉘코드-만들기/">[pwnable.kr] fsb writeup</a></span>
-		
-		</li>			
-		
-		
-		
-		<li class="listing-item">
-		<span class="date_class"> 2019-01-21 </span> &raquo;
-		
-		   <span class="title"><a href="/2019/01/21/hello-world/">Hello World</a></span>
-		
-		</li>			
-		
-		</ul>
+		<div class="page-header">
+			<h1> [pwnable.kr] dragon write up</h1>
 		</div>
-
-</div> <!-- col-md-9/col-md-12 -->
-
-
-<div class="col-md-3">
-	<div id="sidebar">
 	
-			
-  <div id="site_search">
-   <div class="form-group">
-    <input type="text" id="local-search-input" name="q" results="0" placeholder="Search" class="st-search-input st-default-search-input form-control">
-   </div>  
-  <div id="local-search-result"></div>
-  </div>
 
 
-		
-			
-		
-			
-	<div class="widget">
-		<h4>Tag Cloud</h4>
-		<ul class="tag_box inline list-unstyled">		
-		
-			<li><a href="/tags/pwnable-shellcode/">pwnable, shellcode<span>1</span></a></li>
-		
-			<li><a href="/tags/pwnable-fsb/">pwnable, fsb<span>1</span></a></li>
-		
-			<li><a href="/tags/pwnable-uaf/">pwnable,uaf<span>1</span></a></li>
-		
-		 
-		</ul>
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <p>FightDragon 함수가 시작할 때 malloc을 보고 힙 관련 취약점이 터질 것이라 유추했다.</p>
+<p>역시 KnightAttack, PreistAttack 함수에서 드래곤의 피가 0 이하일 때 dragon 배열을 free 시키고 1을 반환해 FightDragon 으로 다시 돌아가는데 if (v3) 분기에서 ((void (__cdecl <em>)(_DWORD </em>))*dragon)(dragon); 을 실행하는 구문이 있는데 이미 free 된 뒤라 UAF가 터진다.</p>
+<p>다만 저 드래곤의 피를 어떻게 0 이하로 만드느냐가 관건인데,</p>
+<p>  dragon+8 은 드래곤의 피다.</p>
+<p>   요 부분에서 _BYTE *, 즉 1바이트로 돼있다. 127을 넘기는 째에 오버플로우 돼서 UAF 익스플로잇을 할 수 있다.</p>
+<p>   Baby Dragon 에서는 딱 봐도 불가능, Mama Dragon 으로 계산해 보면 (프리스트가 Invisible 이란 선택지가 있어서 살았다.)</p>
+<p>  -Preist-</p>
+<p>  [1] 85 Invisible</p>
+<p>  [2] 95 Invisible</p>
+<p>  [3] 100 Mana Charge, Player Health: 32</p>
+<p>  [4] 105 Invisible</p>
+<p>  [5] 110 Invisible</p>
+<p>  [6] 115 Mana Charge, Player Health: 22</p>
+<p>  [7] 120 Invisible</p>
+<p>  [8] 125 Invisible</p>
+<p>  [9] 130 Mana Charge, Player Health: 12</p>
+<p>  로 프리스트, Mama Dragon 이란 경우 하에 UAF 가 가능하겠다. ( SecretLevel 함수 안에 push “/bin/sh”, call system 이 있어서 그쪽으로 점프해 주면 된다. call 과 jmp 는 push eip 를 하냐 안하냐 밖엔 차이가 없다. )</p>
+<p>  pwntools 를 이용해 익스하면 되긴 하지만 살짝 꼼수를 부렸다.</p>
+<p>  처음엔 Baby Dragon 밖에는 나오지 않길래 a.txt에</p>
+<p>  1</p>
+<p>  1</p>
+<p>  1</p>
+<p>  1</p>
+<p>  3</p>
+<p>  3</p>
+<p>  2</p>
+<p>  3</p>
+<p>  3</p>
+<p>  2</p>
+<p>  3</p>
+<p>  3</p>
+<p>  2</p>
+<p>  3</p>
+<p>  3</p>
+<p>  2</p>
+<p>  p32(address)</p>
+<p>  이렇게 넣은 뒤 (cat a.txt; cat) | nc pwnable.kr 9004</p>
+<p>  돌리고 cat flag 때렸다.</p>
+<p>  포너블 공부를 하던 나날 중에서 이례적으로 재밌는 날이었다.</p>
+<p>  P.S  IDA Hex-Rays 가 의외로 오류가 많은 것 같기도 하다.</p>
+	  
 	</div>
 
+	<div>
+  	<center>
+	<div class="pagination">
 
-		
-			
-<div class="widget">
-  <h4>Recent Posts</h4>
-  <ul class="entry list-unstyled">
     
-      <li>
-        <a href="/2019/01/22/pwnable-kr-dragon-write-up/"><i class="fa fa-file-o"></i>[pwnable.kr] dragon write up</a>
-      </li>
     
-      <li>
-        <a href="/2019/01/22/pwnable-kr-fsb-writeup/"><i class="fa fa-file-o"></i>[pwnable.kr] fsb writeup</a>
-      </li>
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
     
-      <li>
-        <a href="/2019/01/22/pwnable-리눅스-상에서-쉘코드-만들기/"><i class="fa fa-file-o"></i>[pwnable.kr] fsb writeup</a>
-      </li>
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-      <li>
-        <a href="/2019/01/21/hello-world/"><i class="fa fa-file-o"></i>Hello World</a>
-      </li>
+    <a href="/2019/01/22/pwnable-kr-fsb-writeup/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
     
-  </ul>
+
+    
 </div>
 
-		
-			
-<div class="widget">
-	<h4>Links</h4>
-	<ul class="blogroll list-unstyled">
+    </center>
+	</div>
 	
-		<li><i class="fa fa-github"></i><a href="https://github.com/blackshow/hexo-theme-freemind.386" title="Freemind.386's Github repository." target="_blank" ]);"="">Freemind.386</a></li>
+	<!-- comment -->
 	
-	</ul>
-</div>
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
 
 
+	</div> <!-- col-md-9/col-md-12 -->
 		
-	</div> <!-- sidebar -->
-</div> <!-- col-md-3 -->
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2019-01-22 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/pwnable-uaf/">pwnable,uaf<span>1</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
 
 
 
-</div>
 	</div>
   </div>
   <div class="container-narrow">
