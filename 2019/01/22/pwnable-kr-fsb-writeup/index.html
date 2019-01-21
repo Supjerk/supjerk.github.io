@@ -6,13 +6,18 @@
   <meta http-equiv="cache-control" content="no-cache">
   <meta http-equiv="expires" content="0">
   
-  <title>Archives: 2019/1 | More deeper..</title>
+  <title>[pwnable.kr] fsb writeup | More deeper..</title>
   <meta name="author" content="Supjerk">
+  
+  <meta name="description" content="https://gist.github.com/ihciah/2b164e86fa9dd2f267d7
+http://jasonjason.tistory.com/5
+http://code1018.tistory.com/185
+대낮부터 고민하다 $EBP를 덮어씌우면 될듯 한 것 같아 시도">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  
+  <meta property="og:title" content="[pwnable.kr] fsb writeup">
   <meta property="og:site_name" content="More deeper..">
 
   
@@ -113,114 +118,111 @@ var _hmt = _hmt || [];
   	<div class="content">
     	 
 
-<!-- title -->
-<div class="page-header">
-  <h1 class="archive-title"><i class="fa fa-archive"></i> 2019/1</h1>
-</div>
 
-<div class="row page">
-  <!-- cols -->
-  
-  <div class="col-md-9">
 	
-
-	  <div id="top_search"></div>
-
-	  <div class="archive">
-		
-		
-		
-			
-			
-			<h4 class="archive-ul" data-toggle="collapse" data-target="#2019">2019<b class="caret"></b></h4>
-			<ul id="2019" class="collapse in">
-			
-		
-		<li class="listing-item">
-		<span class="date_class"> 2019-01-22 </span> &raquo;
-		
-		   <span class="title"><a href="/2019/01/22/pwnable-kr-fsb-writeup/">[pwnable.kr] fsb writeup</a></span>
-		
-		</li>			
-		
-		
-		
-		<li class="listing-item">
-		<span class="date_class"> 2019-01-21 </span> &raquo;
-		
-		   <span class="title"><a href="/2019/01/21/hello-world/">Hello World</a></span>
-		
-		</li>			
-		
-		</ul>
+		<div class="page-header">
+			<h1> [pwnable.kr] fsb writeup</h1>
 		</div>
-
-</div> <!-- col-md-9/col-md-12 -->
-
-
-<div class="col-md-3">
-	<div id="sidebar">
 	
-			
-  <div id="site_search">
-   <div class="form-group">
-    <input type="text" id="local-search-input" name="q" results="0" placeholder="Search" class="st-search-input st-default-search-input form-control">
-   </div>  
-  <div id="local-search-result"></div>
-  </div>
 
 
-		
-			
-		
-			
-	<div class="widget">
-		<h4>Tag Cloud</h4>
-		<ul class="tag_box inline list-unstyled">		
-		
-			<li><a href="/tags/pwnable-fsb/">pwnable, fsb<span>1</span></a></li>
-		
-		 
-		</ul>
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <p><a href="https://gist.github.com/ihciah/2b164e86fa9dd2f267d7" target="_blank" rel="noopener">https://gist.github.com/ihciah/2b164e86fa9dd2f267d7</a></p>
+<p><a href="http://jasonjason.tistory.com/5" target="_blank" rel="noopener">http://jasonjason.tistory.com/5</a></p>
+<p><a href="http://code1018.tistory.com/185" target="_blank" rel="noopener">http://code1018.tistory.com/185</a></p>
+<p>대낮부터 고민하다 $EBP를 덮어씌우면 될듯 한 것 같아 시도해 봤지만 무슨 이유인지 $EBP가 다른 값으로 변하고 후에 다시 변조해 줘도 다른 값을 $EIP로 인식을 해서 제대로 쉘을 못 땄다. </p>
+<p>더 분석해 보면 될 터인데 특유의 어셈블리어 울렁증이 발생해 재빨리 구글에 write up 을 치고 위 세 개를 순서대로 봤다.</p>
+<p>첫 번째 write up 에서는 offset 도 따고 %hn 도 하고 뭐시기 뭐시기 아주 생지랄을 하는데 뭐라 씨부리는 지 몰라서 패스했고</p>
+<p>두 번째 write up 에서는 잘 가다가 영화 보고 익스플로잇 돌리니 Seg Fault 나고 시간은 자정을 넘긴 지라 세번째 write up 으로 패스했다.</p>
+<p>세 번째 write up 에서는 드디어 한글로 제대로 설명된 포스트가 있었다. printf_GOT 를 execve를 call 하는 주소로 overwrite 하는 간단명료한 글이었다.</p>
+<p>그 덕택으로 아래와 같이 flag를 땄다. 나중에 다시 풀어봐야 할 문제 목록 중 하나다 ㅋㅋ.(이때까지 푼 문제 전체가 그렇다.)</p>
+	  
 	</div>
 
+	<div>
+  	<center>
+	<div class="pagination">
 
-		
-			
-<div class="widget">
-  <h4>Recent Posts</h4>
-  <ul class="entry list-unstyled">
     
-      <li>
-        <a href="/2019/01/22/pwnable-kr-fsb-writeup/"><i class="fa fa-file-o"></i>[pwnable.kr] fsb writeup</a>
-      </li>
     
-      <li>
-        <a href="/2019/01/21/hello-world/"><i class="fa fa-file-o"></i>Hello World</a>
-      </li>
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
     
-  </ul>
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2019/01/21/hello-world/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
 </div>
 
-		
-			
-<div class="widget">
-	<h4>Links</h4>
-	<ul class="blogroll list-unstyled">
+    </center>
+	</div>
 	
-		<li><i class="fa fa-github"></i><a href="https://github.com/blackshow/hexo-theme-freemind.386" title="Freemind.386's Github repository." target="_blank" ]);"="">Freemind.386</a></li>
+	<!-- comment -->
 	
-	</ul>
-</div>
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
 
 
+	</div> <!-- col-md-9/col-md-12 -->
 		
-	</div> <!-- sidebar -->
-</div> <!-- col-md-3 -->
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2019-01-22 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/pwnable-fsb/">pwnable, fsb<span>1</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
 
 
 
-</div>
 	</div>
   </div>
   <div class="container-narrow">
