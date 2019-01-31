@@ -208,7 +208,7 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2019/01/22/pwnable-Build-shellcode-in-linux/">[pwnable.kr] Build shellcode in linux</a>
+			<a href="/2019/01/22/pwnable-Build-shellcode-in-linux/">Build shellcode in linux</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
@@ -280,15 +280,9 @@ var _hmt = _hmt || [];
   <div class="row">
 	
 	
-		<p><a href="https://gist.github.com/ihciah/2b164e86fa9dd2f267d7" target="_blank" rel="noopener">https://gist.github.com/ihciah/2b164e86fa9dd2f267d7</a></p>
-<p><a href="http://jasonjason.tistory.com/5" target="_blank" rel="noopener">http://jasonjason.tistory.com/5</a></p>
-<p><a href="http://code1018.tistory.com/185" target="_blank" rel="noopener">http://code1018.tistory.com/185</a></p>
-<p>대낮부터 고민하다 $EBP를 덮어씌우면 될듯 한 것 같아 시도해 봤지만 무슨 이유인지 $EBP가 다른 값으로 변하고 후에 다시 변조해 줘도 다른 값을 $EIP로 인식을 해서 제대로 쉘을 못 땄다. </p>
-<p>더 분석해 보면 될 터인데 특유의 어셈블리어 울렁증이 발생해 재빨리 구글에 write up 을 치고 위 세 개를 순서대로 봤다.</p>
-<p>첫 번째 write up 에서는 offset 도 따고 %hn 도 하고 뭐시기 뭐시기 아주 생지랄을 하는데 뭐라 씨부리는 지 몰라서 패스했고</p>
-<p>두 번째 write up 에서는 잘 가다가 영화 보고 익스플로잇 돌리니 Seg Fault 나고 시간은 자정을 넘긴 지라 세번째 write up 으로 패스했다.</p>
-<p>세 번째 write up 에서는 드디어 한글로 제대로 설명된 포스트가 있었다. printf_GOT 를 execve를 call 하는 주소로 overwrite 하는 간단명료한 글이었다.</p>
-<p>그 덕택으로 아래와 같이 flag를 땄다. 나중에 다시 풀어봐야 할 문제 목록 중 하나다 ㅋㅋ.(이때까지 푼 문제 전체가 그렇다.)</p>
+		<p>대낮부터 고민하다 $EBP를 덮어씌우면 될듯 한 것 같아 시도해 봤지만 무슨 이유인지 $EBP가 다른 값으로 변하고 후에 다시 변조해 줘도 다른 값을 $EIP로 인식을 해서 제대로 쉘을 못 땄다. </p>
+<p>printf_GOT 를 execve를 call 하는 주소로 overwrite 하는 간단명료한 방법으로 해결됐다.</p>
+<p>그 덕택으로 아래와 같이 flag를 땄다. 나중에 다시 풀어봐야 할 문제 목록 중 하나다. (이때까지 푼 문제 전부가 그렇다.)</p>
 
 	
 	</div>
@@ -389,7 +383,7 @@ var _hmt = _hmt || [];
       </li>
     
       <li>
-        <a href="/2019/01/22/pwnable-Build-shellcode-in-linux/"><i class="fa fa-file-o"></i>[pwnable.kr] Build shellcod...</a>
+        <a href="/2019/01/22/pwnable-Build-shellcode-in-linux/"><i class="fa fa-file-o"></i>Build shellcode in linux</a>
       </li>
     
       <li>
