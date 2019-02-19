@@ -244,6 +244,36 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2019/01/22/pwnable-kr-fsb-writeup/">[pwnable.kr] fsb writeup</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2019-01-22  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>대낮부터 고민하다 $EBP를 덮어씌우면 될듯 한 것 같아 시도해 봤지만 무슨 이유인지 $EBP가 다른 값으로 변하고 후에 다시 변조해 줘도 다른 값을 $EIP로 인식을 해서 제대로 쉘을 못 땄다. </p>
+<p>printf_GOT 를 execve를 call 하는 주소로 overwrite 하는 간단명료한 방법으로 해결됐다.</p>
+<p>그 덕택으로 아래와 같이 flag를 땄다. 나중에 다시 풀어봐야 할 문제 목록 중 하나다. (이때까지 푼 문제 전부가 그렇다.)</p>
+
+	
+	</div>
+  <a type="button" href="/2019/01/22/pwnable-kr-fsb-writeup/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2019/01/22/pwnable-Build-shellcode-in-linux/">Build shellcode in linux</a>
 		</h3>
 		</div>
@@ -293,36 +323,6 @@ var _hmt = _hmt || [];
 	
 	</div>
   <a type="button" href="/2019/01/22/pwnable-Build-shellcode-in-linux/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2019/01/22/pwnable-kr-fsb-writeup/">[pwnable.kr] fsb writeup</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2019-01-22  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>대낮부터 고민하다 $EBP를 덮어씌우면 될듯 한 것 같아 시도해 봤지만 무슨 이유인지 $EBP가 다른 값으로 변하고 후에 다시 변조해 줘도 다른 값을 $EIP로 인식을 해서 제대로 쉘을 못 땄다. </p>
-<p>printf_GOT 를 execve를 call 하는 주소로 overwrite 하는 간단명료한 방법으로 해결됐다.</p>
-<p>그 덕택으로 아래와 같이 flag를 땄다. 나중에 다시 풀어봐야 할 문제 목록 중 하나다. (이때까지 푼 문제 전부가 그렇다.)</p>
-
-	
-	</div>
-  <a type="button" href="/2019/01/22/pwnable-kr-fsb-writeup/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -387,11 +387,11 @@ var _hmt = _hmt || [];
       </li>
     
       <li>
-        <a href="/2019/01/22/pwnable-Build-shellcode-in-linux/"><i class="fa fa-file-o"></i>Build shellcode in linux</a>
+        <a href="/2019/01/22/pwnable-kr-fsb-writeup/"><i class="fa fa-file-o"></i>[pwnable.kr] fsb writeup</a>
       </li>
     
       <li>
-        <a href="/2019/01/22/pwnable-kr-fsb-writeup/"><i class="fa fa-file-o"></i>[pwnable.kr] fsb writeup</a>
+        <a href="/2019/01/22/pwnable-Build-shellcode-in-linux/"><i class="fa fa-file-o"></i>Build shellcode in linux</a>
       </li>
     
   </ul>
@@ -405,7 +405,7 @@ var _hmt = _hmt || [];
 	
 		<li><i class="fa fa-github"></i><a href="https://github.com/blackshow/hexo-theme-freemind.386" title="Freemind.386's Github repository." target="_blank" ]);"="">Freemind.386</a></li>
 	
-		<li><i class=""></i><a href="teu0766@naver.com" title="" target="_blank" ]);"="">E-mail</a></li>
+		<li><i class=""></i><a href="//teu0766@naver.com" title="" target="_blank" ]);"="">E-mail</a></li>
 	
 	</ul>
 </div>
